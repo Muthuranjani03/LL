@@ -1,0 +1,59 @@
+#include<stdlib.h>
+#include <stdio.h>
+struct node {
+    int col;
+    int data;
+    struct node *next;
+};
+void create(int m,int n,int i,int j,int val,struct node *arr[m])
+{
+    struct node *new_node;
+    new_node=(struct node *)malloc(sizeof(struct node));
+    new_node->data=val;
+    new_node->col=j;
+    new_node->next=NULL;
+    if(arr[i]==NULL) arr[i]=new_node; //if there is initially no node in row i
+    else
+    {
+        struct node *p=arr[i];
+        while(p->next ) p=p->next;   //traversing to the last node in the row i
+        p->next=new_node;            // new node is added at the end of the list;
+    }
+}
+int main()
+{
+    int m,n,val;
+ printf("Enter the order of matrix (m,n): ");
+ scanf("%d %d",&m,&n);
+ struct node *arr[m];    // array of linked lists is created of size equivalent to number of rows .
+ for(int i=0;i<m;i++) 
+  arr[i]=NULL;
+ 
+ //scanning the elements of a matrix;
+ for(int i=0;i<m;i++)
+ {
+     for(int j=0;j<n;j++)
+      {
+          printf("enter the value a[%d][%d]:",i,j);
+          scanf("%d",&val);
+          if(val) create(m,n,i,j,val,arr);  //creating the linked list for non-zero elements
+      }
+ }
+ //printing the sparse matrix;
+ printf("Sparse matrix\n");
+ for(int i=0;i<m;i++,printf("\n"))
+ {
+     struct node *p=arr[i];  
+     for(int j=0;j<n;j++)
+     {
+         if(p && p->col==j)   // to check if the node is not null and if the non-zero element's col matches the current col no.
+         {
+             printf("%d ",p->data);
+             p=p->next;      // moving to the next node;
+         }
+          
+         else printf("0 ");
+     }
+ }
+    return 0;
+}
